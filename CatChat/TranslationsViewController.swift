@@ -13,23 +13,6 @@ class TranslationsViewController: UITableViewController {
     var dataSource = [String]()
     var cat = Cat("Mr. Whiskers")
     
-    @IBAction func showTextEntry(sender: AnyObject?) {
-        guard let viewController = storyboard?.instantiateViewControllerWithIdentifier("TextEntry") as? TextEntryViewController else {
-            fatalError()
-        }
-        
-        viewController.cat = cat
-        
-        viewController.completionHandler = { (string) in
-            let translation = self.cat.translate(string)
-            let index = NSIndexPath(forRow: self.dataSource.count, inSection: 0)
-            self.dataSource.append(translation)
-            self.tableView.insertRowsAtIndexPaths([index], withRowAnimation: .Automatic)
-        }
-        
-        presentViewController(viewController, animated: true, completion: nil)
-    }
-    
     // MARK: UIViewController
     
     override func viewDidLoad() {
@@ -57,22 +40,22 @@ class TranslationsViewController: UITableViewController {
         return cell
     }
     
-//    // MARK: Unwind Segue
-//
-//    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-//        
-//        if let destination = segue.destinationViewController as? TextEntryViewController {
-//            destination.cat = cat
-//        }
-//    }
-//    
-//    @IBAction func unwindToTranslations(segue: UIStoryboardSegue) {
-//        
-//        guard let viewController = segue.sourceViewController as? TextEntryViewController else { fatalError("invalid view controller!") }
-//        guard let string = viewController.string else { fatalError("no text!") }
-//        let translation = self.cat.translate(string)
-//        let index = NSIndexPath(forRow: self.dataSource.count, inSection: 0)
-//        self.dataSource.append(translation)
-//        self.tableView.insertRowsAtIndexPaths([index], withRowAnimation: .Automatic)
-//    }
+    // MARK: Unwind Segue
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if let destination = segue.destinationViewController as? TextEntryViewController {
+            destination.cat = cat
+        }
+    }
+    
+    @IBAction func unwindToTranslations(segue: UIStoryboardSegue) {
+        
+        guard let viewController = segue.sourceViewController as? TextEntryViewController else { fatalError("invalid view controller!") }
+        guard let string = viewController.string else { fatalError("no text!") }
+        let translation = self.cat.translate(string)
+        let index = NSIndexPath(forRow: self.dataSource.count, inSection: 0)
+        self.dataSource.append(translation)
+        self.tableView.insertRowsAtIndexPaths([index], withRowAnimation: .Automatic)
+    }
 }
